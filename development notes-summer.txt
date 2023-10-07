@@ -1,0 +1,51 @@
+*************** preset 저장되는 로직 설명 *****************
+save버튼을 누르면 SoundScreen의 storeData()가 실행되어서 setSaveClicked + 1되고,
+그러면 Sound.js에서 setSelectedItem()이 실행되어 
+SoundScreen의 selectedItem 값이 업데이트됨. 
+그러면 SoundScreen의 useEffect가 발동되어 AsyncStorage에 값이 저장됨
+-> 이제 그냥 하트버튼 누르면 onSave() 펑션 발동되어 모달 열리고 모달에서 저장버튼 누르면 저장되게함
+사운드카드 클릭하면 select된 카드들은 SoundScreen의 selectedItem에 저장됨
+*************************************************************
+
+사운드 mp3파일은 firebase storage에 업로드하고, Sound Card 데이터들은 firestore에서 받아와서 렌더해준다.
+
+expo update 기능을 써보기
+
+스플래시 스크린, 아이콘 디자인하기
+
+일단 이미지랑 mp3 파일 모두 Fire store & Firestore에서 가져오고, 
+나중에 유저가 많아지면 이걸 받아와서 유저 디바이스 안에 caching하는 작업을 해서 firebase에 돈이 덜 청구되게
+-> 이미지는 app.js에서 앱 실행시 한번 firestore에서 url 받아와서 context로 다른 컴포넌트들에서 쓸건데, 
+어차피 url을 이용해 firebase storage에서 가져오는거라
+context써도 계속 청구되는건가 이미지 한번 볼때마다?
+
+-> Firestore에서 데이터 fetch 해올때, useFocusEffect로 화면 전환될 때마다 계속 가져올 필요는 없다.
+왜냐하면 sound 데이터가 자주 업데이트 되는 것이 아니기 때문이다.
+
+-> Firestore에서 데이터 fetch는 useEffect로 앱 실행 후 화면 첫 렌더시에 한번씩만 가져오고,
+(cache는 궂이 필요하지 않을 것 같음, 하지만 필요할 시 https://www.youtube.com/watch?v=iQOTjUko9WM 이 영상 참고 
+영상 내용은 하루에 딱 한번 데이터를 fetch해 와서 cache에 넣어 쓰는거임)
+Firebase Storage(image 데이터들)는 cache를 구현 할 수 있나 보기
+
+
+
+작업중인 사항
+
+추가해야 할 기능들
+스토리 보이스 목소리 볼륨 조절
+스토리 보이스 일시정지 기능
+사운드 일시정지 기능
+
+고쳐야 할 사항들
+forest loop 더 자연스럽게
+
+
+오류
+반복재생이 무한정 되어야하는데 일정 시간 이후 꺼짐 소리들이
+
+스토리 재생중 22:58쯤에 train소리가 멈춤, forest는 아직 재생중, 폰 화면이 꺼져있었음
+30분에 Forest도 꺼짐. 화면도꺼져있었음
+->react-native-foreground-service or https://www.npmjs.com/package/react-native-background-actions
+
+화면이 계속 켜져있게해야하나?
+

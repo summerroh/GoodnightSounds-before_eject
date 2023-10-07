@@ -1,0 +1,48 @@
+{
+  "expo": {
+    "name": "Goodnight Sounds",
+    "slug": "GoodnightSounds",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#212133"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0,
+      "url": "https://u.expo.dev/0808c32c-5f3a-40b7-9ca4-285ff8ef4e15"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "UIBackgroundModes": ["audio"]
+      }
+    },
+    "android": {
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#212133"
+      },
+      "package": "com.summerroh.GoodnightSounds",
+      "permissions": [
+        "REQUEST_IGNORE_BATTERY_OPTIMIZATIONS",
+        "FOREGROUND_SERVICE"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "0808c32c-5f3a-40b7-9ca4-285ff8ef4e15"
+      }
+    },
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    }
+  }
+}
