@@ -25,7 +25,7 @@ function Sound({ itemName, itemMusic, iconUri, setSelectedItem, preset }) {
     }
     if (pause) {
       stopSound();
-      setPause(false);
+      setPause(true);
     }
   }, [isStoryPlaying, pause, isFocused]);
 
