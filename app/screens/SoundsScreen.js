@@ -11,8 +11,22 @@ import {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { db } from "../../firebaseConfig";
 import { collection, getDocs } from "firebase/firestore";
+import TrackPlayer, {
+  Capability,
+  State,
+  Event,
+  usePlaybackState,
+  useProgress,
+  useTrackPlayerEvents,
+  TrackPlayerEvents,
+  STATE_PLAYING,
+  RepeatMode,
+  AppKilledPlaybackBehavior,
+} from "react-native-track-player";
 
 import { Entypo, Feather } from "@expo/vector-icons";
+const trackUrl =
+  "https://firebasestorage.googleapis.com/v0/b/goodnightsounds-d5cd5.appspot.com/o/Typewriter.mp3?alt=media&token=6e229455-7ad2-4743-a59f-8b805e7f2c09";
 
 import Screen from "../components/Screen";
 import Sound from "../components/Sound";
@@ -20,6 +34,7 @@ import SetNameModal from "../components/SetNameModal";
 import { useFocusEffect } from "@react-navigation/native";
 import defaultStyles from "../../style";
 import { useStoryPlaying } from "../context/StoryContext";
+// import MusicPlayer from "../components/MusicPlayer";
 
 function SoundsScreen({ navigation, route }) {
   const [selectedItem, setSelectedItem] = useState([]);
@@ -27,7 +42,69 @@ function SoundsScreen({ navigation, route }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [text, onChangeText] = useState("Preset Name");
   const [data, setData] = useState([]);
-  const { setPause } = useStoryPlaying();
+  const { pause, setPause, setResume } = useStoryPlaying();
+
+  //////// Track Player //////
+  const setupPlayer = async () => {
+    try {
+      await TrackPlayer.setupPlayer();
+      await TrackPlayer.updateOptions({
+        capabilities: [
+          Capability.Play,
+          Capability.Pause,
+          Capability.SkipToNext,
+          Capability.SkipToPrevious,
+        ],
+        android: {
+          appKilledPlaybackBehavior:
+            AppKilledPlaybackBehavior.StopPlaybackAndRemoveNotification,
+        },
+      });
+
+      // Define your music track details (e.g., URL, title, artist).
+      const track = {
+        id: "your_track_id",
+        url: trackUrl, // Replace with your audio file URL
+        title: "Your Track Title",
+        artist: "Your Artist",
+        duration: 0, // Set duration to 0 for streaming audio
+      };
+
+      // Add the track to the queue.
+      await TrackPlayer.add([track]);
+
+      // Play the track.
+      // await TrackPlayer.play();
+      // await TrackPlayer.setRepeatMode(RepeatMode.Track);
+    } catch (error) {
+      console.error("Error setting up player: ", error);
+    }
+  };
+
+  // Add this code inside your useEffect after calling setupPlayer
+  // useEffect(() => {
+  //   const onPlaybackTrackChanged = async (data) => {
+  //     if (data.state === STATE_PLAYING) {
+  //       // The track is playing; you can handle any related logic here
+  //     }
+  //   };
+
+  //   // Subscribe to the event
+  //   TrackPlayer.addEventListener(
+  //     TrackPlayerEvents.PLAYBACK_TRACK_CHANGED,
+  //     onPlaybackTrackChanged
+  //   );
+
+  //   return () => {
+  //     // Unsubscribe from the event when component unmounts
+  //     TrackPlayer.removeEventListener(
+  //       TrackPlayerEvents.PLAYBACK_TRACK_CHANGED,
+  //       onPlaybackTrackChanged
+  //     );
+  //   };
+  // }, []);
+
+  //////////
 
   useFocusEffect(
     React.useCallback(() => {
@@ -39,6 +116,7 @@ function SoundsScreen({ navigation, route }) {
 
   useEffect(() => {
     getData();
+    setupPlayer();
 
     return () => {};
   }, []);
@@ -69,7 +147,7 @@ function SoundsScreen({ navigation, route }) {
   }, [presetsData]);
 
   useEffect(() => {
-    console.log("selectedItem: ", selectedItem);
+    // console.log("selectedItem: ", selectedItem);
   }, [selectedItem]);
 
   const storeData = async (value) => {
@@ -122,6 +200,8 @@ function SoundsScreen({ navigation, route }) {
 
   return (
     <Screen style={styles.screen}>
+      {/* <MusicPlayer /> */}
+
       <View style={styles.container}>
         <SetNameModal
           modalVisible={modalVisible}
@@ -181,7 +261,11 @@ function SoundsScreen({ navigation, route }) {
           <Text style={styles.subText}>Save</Text>
         </TouchableOpacity>
 
-        <Button title="pause" onPress={() => setPause(true)}></Button>
+        {pause ? (
+          <Button title="resume" onPress={() => setResume(true)}></Button>
+        ) : (
+          <Button title="pause" onPress={() => setPause(true)}></Button>
+        )}
       </View>
     </Screen>
   );

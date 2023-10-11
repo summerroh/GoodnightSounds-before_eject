@@ -9,10 +9,18 @@ const StoryPlayingContext = createContext();
 export function StoryProvider({ children }) {
   const [isStoryPlaying, setIsStoryPlaying] = useState(false);
   const [pause, setPause] = useState(false);
+  const [resume, setResume] = useState(false);
 
   return (
     <StoryPlayingContext.Provider
-      value={{ isStoryPlaying, setIsStoryPlaying, pause, setPause }}
+      value={{
+        isStoryPlaying,
+        setIsStoryPlaying,
+        pause,
+        setPause,
+        resume,
+        setResume,
+      }}
     >
       {children}
     </StoryPlayingContext.Provider>

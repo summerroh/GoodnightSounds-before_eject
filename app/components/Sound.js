@@ -9,7 +9,8 @@ import { useIsFocused } from "@react-navigation/native";
 import { useStoryPlaying } from "../context/StoryContext";
 
 function Sound({ itemName, itemMusic, iconUri, setSelectedItem, preset }) {
-  const { isStoryPlaying, pause, setPause } = useStoryPlaying();
+  const { isStoryPlaying, pause, setPause, resume, setResume } =
+    useStoryPlaying();
   const [soundObj, setSoundObj] = useState(new Audio.Sound());
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(0);
@@ -18,16 +19,26 @@ function Sound({ itemName, itemMusic, iconUri, setSelectedItem, preset }) {
   const firstRender = useRef(true);
   const isFocused = useIsFocused();
 
-  // Use the current route name to check if the screen is "StoryStack" and stop the sound accordingly
   useEffect(() => {
-    if (isStoryPlaying) {
-      stopSound();
+    // isPlaying includes when the sound is playing and when the sound is on pause
+    // Stop the sound effect that are playing when the story modal is open
+    if (isPlaying) {
+      if (isStoryPlaying) {
+        stopSound();
+      }
+      if (pause) {
+        pauseSound();
+        console.log("pauseSound", "isplaying ", isPlaying, "pause: ", pause);
+        // setPause(true);
+      }
+      if (resume) {
+        resumeSound();
+        setPause(false);
+        setResume(false);
+        console.log("resumeSound", "isplaying ", isPlaying, "pause: ", pause);
+      }
     }
-    if (pause) {
-      stopSound();
-      setPause(true);
-    }
-  }, [isStoryPlaying, pause, isFocused]);
+  }, [isStoryPlaying, pause, resume, isFocused, isPlaying]);
 
   useEffect(() => {
     Audio.setAudioModeAsync({
@@ -77,7 +88,9 @@ function Sound({ itemName, itemMusic, iconUri, setSelectedItem, preset }) {
   // 프리셋 로드버튼눌렀을때 (음악 플레이 기능)
   const playSound = async (audio, volume) => {
     setIsPlaying(true);
-    setPause(false);
+    if (pause) {
+      setPause(false);
+    }
     if (audio) {
       await soundObj.loadAsync(
         { uri: audio },
@@ -94,6 +107,23 @@ function Sound({ itemName, itemMusic, iconUri, setSelectedItem, preset }) {
   const stopSound = async () => {
     setIsPlaying(false);
     await soundObj.unloadAsync();
+  };
+
+  // Trackn Player에서 일시정지 버튼눌렀을때 (음악 일시정지 기능)
+  const pauseSound = async () => {
+    // setIsPlaying(false);
+    await soundObj.pauseAsync();
+  };
+
+  //
+  const resumeSound = async () => {
+    // setIsPlaying(!isPlaying);
+
+    // if (!isPlaying) {
+    if (soundObj._loaded) {
+      await soundObj.playAsync();
+    }
+    // }
   };
 
   // 사운드카드 눌렀을때
