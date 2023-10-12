@@ -25,8 +25,8 @@ import TrackPlayer, {
 } from "react-native-track-player";
 
 import { Entypo, Feather } from "@expo/vector-icons";
-const trackUrl =
-  "https://firebasestorage.googleapis.com/v0/b/goodnightsounds-d5cd5.appspot.com/o/Typewriter.mp3?alt=media&token=6e229455-7ad2-4743-a59f-8b805e7f2c09";
+const SilenceTrack =
+  "https://firebasestorage.googleapis.com/v0/b/goodnightsounds-d5cd5.appspot.com/o/silence.mp3?alt=media&token=8cb28027-60cc-40c7-9e49-b8f7b3727d1a&_gl=1*quk9jp*_ga*MTA1MDU3NTQ1OS4xNjgxNzc4ODMx*_ga_CW55HF8NVT*MTY5NzA4MjQ3OS4xNzUuMS4xNjk3MDgyNTE4LjIxLjAuMA..";
 
 import Screen from "../components/Screen";
 import Sound from "../components/Sound";
@@ -52,8 +52,8 @@ function SoundsScreen({ navigation, route }) {
         capabilities: [
           Capability.Play,
           Capability.Pause,
-          Capability.SkipToNext,
-          Capability.SkipToPrevious,
+          // Capability.SkipToNext,
+          // Capability.SkipToPrevious,
         ],
         android: {
           appKilledPlaybackBehavior:
@@ -64,10 +64,11 @@ function SoundsScreen({ navigation, route }) {
       // Define your music track details (e.g., URL, title, artist).
       const track = {
         id: "your_track_id",
-        url: trackUrl, // Replace with your audio file URL
-        title: "Your Track Title",
-        artist: "Your Artist",
+        url: SilenceTrack, // Replace with your audio file URL
+        title: "Goodnight Sounds",
+        artist: "is now playing",
         duration: 0, // Set duration to 0 for streaming audio
+        artwork: require("../../assets/icon.png"),
       };
 
       // Add the track to the queue.
@@ -216,16 +217,9 @@ function SoundsScreen({ navigation, route }) {
           ListHeaderComponent={
             <View style={styles.listHeadContainer}>
               <Text style={defaultStyles.screenHeader}>
-                Goodnight, {"\n"}Summer
+                {/* Goodnight, {"\n"}Summer */}
+                Goodnight Sounds
               </Text>
-
-              <Entypo
-                name="folder-music"
-                size={34}
-                color="#fff"
-                style={styles.presetIcon}
-                onPress={() => navigation.navigate("presetScreen")}
-              />
             </View>
           }
           contentContainerStyle={{
@@ -261,11 +255,11 @@ function SoundsScreen({ navigation, route }) {
           <Text style={styles.subText}>Save</Text>
         </TouchableOpacity>
 
-        {pause ? (
+        {/* {pause ? (
           <Button title="resume" onPress={() => setResume(true)}></Button>
         ) : (
           <Button title="pause" onPress={() => setPause(true)}></Button>
-        )}
+        )} */}
       </View>
     </Screen>
   );
