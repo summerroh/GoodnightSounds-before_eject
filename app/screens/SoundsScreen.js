@@ -26,7 +26,7 @@ import TrackPlayer, {
 
 import { Entypo, Feather } from "@expo/vector-icons";
 const SilenceTrack =
-  "https://firebasestorage.googleapis.com/v0/b/goodnightsounds-d5cd5.appspot.com/o/silence.mp3?alt=media&token=8cb28027-60cc-40c7-9e49-b8f7b3727d1a&_gl=1*quk9jp*_ga*MTA1MDU3NTQ1OS4xNjgxNzc4ODMx*_ga_CW55HF8NVT*MTY5NzA4MjQ3OS4xNzUuMS4xNjk3MDgyNTE4LjIxLjAuMA..";
+  "";
 
 import Screen from "../components/Screen";
 import Sound from "../components/Sound";
